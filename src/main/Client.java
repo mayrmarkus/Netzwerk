@@ -1,5 +1,5 @@
-
-    // A Java program for a Client
+package main;
+// A Java program for a main.Client
 import java.net.*;
 import java.io.*;
 
