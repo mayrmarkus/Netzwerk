@@ -27,7 +27,7 @@ public class Game {
     Logger log;
 
     //---> 7  high 6 wide
-    int[][] field = new int[7][6];
+    int[][] field = new int[6][7];
 
     void addPlayer(Player p){
         if(p1 == null){

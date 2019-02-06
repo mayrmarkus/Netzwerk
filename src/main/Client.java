@@ -3,9 +3,10 @@ package main;
 import main.GUI.FourInARowPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONString;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,11 +24,17 @@ public class Client {
     private boolean spieler = true;
 
     static JFrame frame = new JFrame("4 Gewinnt");
+    public static Socket socket;
+
+
 
     public static void main(String[] args) throws IOException {
         System.out.println("Enter the IP address of a machine running the date server:");
         String serverAddress = new Scanner(System.in).nextLine();
-        Socket socket = new Socket(serverAddress, 9090);
+        socket = new Socket(serverAddress, 9090);
+
+
+
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         String response = in.readLine();
@@ -38,8 +45,12 @@ public class Client {
 
         System.out.println("Server response: " + response);
 
+         FourInARowPanel r = new FourInARowPanel(field);
+        /*
         frame.setVisible(true);
+        frame.setPreferredSize(new Dimension(500,500));
         frame.add(new FourInARowPanel(field));
+        */
 
 
 
@@ -47,7 +58,7 @@ public class Client {
 
     private static int[][] toIntegerArray(JSONObject json, String key) {
 
-        int[][] field = new int[7][6];
+        int[][] field = new int[6][7];
 
         JSONArray arr = json.getJSONArray(key);
 
@@ -64,6 +75,17 @@ public class Client {
 
 
         return field;
+    }
+
+    public static void sendData(int moove) throws IOException {
+        JSONObject js = new JSONObject();
+
+        js.put("moove", moove);
+
+        PrintWriter pw = new PrintWriter(socket.getOutputStream());
+
+        pw.println(js.toString());
+        System.out.println(js.toString());
     }
 
 }
